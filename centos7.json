@@ -1,0 +1,39 @@
+{
+    "builders": [
+        {
+            "type": "virtualbox-iso",
+            "format": "ova",
+            "boot_command": [
+                "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+            ],
+            "boot_wait": "10s",
+            "disk_size": 40960,
+            "guest_os_type": "RedHat_64",
+            "hard_drive_interface": "sata",
+            "headless": false,
+            "http_directory": "http",
+            "iso_urls": [
+                "file://{{ Env `PWD`}}/files/CentOS-7-x86_64-DVD-1804.iso"
+            ],
+            "iso_checksum_type": "sha256",
+            "iso_checksum": "506e4e06abf778c3435b4e5745df13e79ebfc86565d7ea1e128067ef6b5a6345",
+            "ssh_username": "root",
+            "ssh_password": "RootPassword",
+            "ssh_port": 22,
+            "ssh_wait_timeout": "10000s",
+            "shutdown_command": "sudo /sbin/halt -h -p",
+            "virtualbox_version_file": ".vbox_version",
+            "vm_name": "centos7",
+            "vboxmanage": [
+                ["modifyvm", "{{.Name}}", "--memory", "512" ],
+                ["modifyvm", "{{.Name}}", "--cpus", "2" ]
+            ]
+        }
+    ],
+    "post-processors": [
+        {
+            "output": "builds/centos7.box",
+            "type": "vagrant"
+        }
+    ]
+}
